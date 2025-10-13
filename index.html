@@ -698,6 +698,373 @@
     </figcaption>
   </figure>
 
+  <p>
+    <strong>Performance.</strong> we provide a quantitative comparison between DiT<sup>DH</sup>-XL, our most performant model, with recent state-of-the-art diffusion models on ImageNet 256×256 and 512×512 in <a href="#tab:comparison_perf">Table 1</a> and <a href="#tab:imagenet512_sota">Table 2</a>.
+    Our method outperforms all prior diffusion models by a large margin, setting new state-of-the-art FID scores of 1.51 without guidance and 1.13 with guidance at 256×256. On 512×512, with 400-epoch training, DiT<sup>DH</sup>-XL achieves an FID of 1.13 with guidance, surpassing the previous best performance achieved by EDM-2 (1.25). 
+  </p>
+
+  <d-figure id="tab:comparison_perf">
+    <figure style="margin: 20px 0;">
+      <div style="overflow-x: auto;">
+        <table class="display-table" style="width: 100%; font-size: 0.6em !important; margin: 0 auto;">
+          <thead>
+            <tr>
+              <th style="text-align:left; border-bottom: 2px solid #000;">Method</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">Epochs</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">#Params</th>
+              <th colspan="4" style="text-align:center; border-bottom: 1px solid #000;">Generation@256 w/o guidance</th>
+              <th colspan="4" style="text-align:center; border-bottom: 1px solid #000;">Generation@256 w/ guidance</th>
+            </tr>
+            <tr>
+              <th style="border-bottom: 2px solid #000;"></th>
+              <th style="border-bottom: 2px solid #000;"></th>
+              <th style="border-bottom: 2px solid #000;"></th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">gFID↓</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">IS↑</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">Prec.↑</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">Rec.↑</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">gFID↓</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">IS↑</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">Prec.↑</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">Rec.↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Autoregressive -->
+            <tr style="background-color: #f5f5f5;">
+              <td colspan="11" style="text-align:left; padding: 8px 4px; font-style: italic; font-weight: bold;">Autoregressive</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">VAR<d-cite key="VAR"></d-cite></td>
+              <td style="text-align:center;">350</td>
+              <td style="text-align:center;">2.0B</td>
+              <td style="text-align:center;">1.92</td>
+              <td style="text-align:center;">323.1</td>
+              <td style="text-align:center;">0.82</td>
+              <td style="text-align:center;">0.59</td>
+              <td style="text-align:center;">1.73</td>
+              <td style="text-align:center;"><strong>350.2</strong></td>
+              <td style="text-align:center;">0.82</td>
+              <td style="text-align:center;">0.60</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">MAR<d-cite key="mar"></d-cite></td>
+              <td style="text-align:center;">800</td>
+              <td style="text-align:center;">943M</td>
+              <td style="text-align:center;">2.35</td>
+              <td style="text-align:center;">227.8</td>
+              <td style="text-align:center;">0.79</td>
+              <td style="text-align:center;">0.62</td>
+              <td style="text-align:center;">1.55</td>
+              <td style="text-align:center;">303.7</td>
+              <td style="text-align:center;">0.81</td>
+              <td style="text-align:center;">0.62</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #000;">
+              <td style="text-align:left; padding: 4px;">xAR<d-cite key="xar"></d-cite></td>
+              <td style="text-align:center;">800</td>
+              <td style="text-align:center;">1.1B</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">1.24</td>
+              <td style="text-align:center;">301.6</td>
+              <td style="text-align:center;"><strong>0.83</strong></td>
+              <td style="text-align:center;">0.64</td>
+            </tr>
+            
+            <!-- Pixel Diffusion -->
+            <tr style="background-color: #f5f5f5;">
+              <td colspan="11" style="text-align:left; padding: 8px 4px; font-style: italic; font-weight: bold;">Pixel Diffusion</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">ADM<d-cite key="adm"></d-cite></td>
+              <td style="text-align:center;">400</td>
+              <td style="text-align:center;">554M</td>
+              <td style="text-align:center;">10.94</td>
+              <td style="text-align:center;">101.0</td>
+              <td style="text-align:center;">0.69</td>
+              <td style="text-align:center;">0.63</td>
+              <td style="text-align:center;">3.94</td>
+              <td style="text-align:center;">215.8</td>
+              <td style="text-align:center;"><strong>0.83</strong></td>
+              <td style="text-align:center;">0.53</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">RIN<d-cite key="rin"></d-cite></td>
+              <td style="text-align:center;">480</td>
+              <td style="text-align:center;">410M</td>
+              <td style="text-align:center;">3.42</td>
+              <td style="text-align:center;">182.0</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">PixelFlow<d-cite key="pixelflow"></d-cite></td>
+              <td style="text-align:center;">320</td>
+              <td style="text-align:center;">677M</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">1.98</td>
+              <td style="text-align:center;">282.1</td>
+              <td style="text-align:center;">0.81</td>
+              <td style="text-align:center;">0.60</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">PixNerd<d-cite key="pixnerd"></d-cite></td>
+              <td style="text-align:center;">160</td>
+              <td style="text-align:center;">700M</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">2.15</td>
+              <td style="text-align:center;">297.0</td>
+              <td style="text-align:center;">0.79</td>
+              <td style="text-align:center;">0.59</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #000;">
+              <td style="text-align:left; padding: 4px;">SiD2<d-cite key="sid2"></d-cite></td>
+              <td style="text-align:center;">1280</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">1.38</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            
+            <!-- Latent Diffusion with VAE -->
+            <tr style="background-color: #f5f5f5;">
+              <td colspan="11" style="text-align:left; padding: 8px 4px; font-style: italic; font-weight: bold;">Latent Diffusion with VAE</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">DiT<d-cite key="dit"></d-cite></td>
+              <td style="text-align:center;">1400</td>
+              <td style="text-align:center;">675M</td>
+              <td style="text-align:center;">9.62</td>
+              <td style="text-align:center;">121.5</td>
+              <td style="text-align:center;">0.67</td>
+              <td style="text-align:center;">0.67</td>
+              <td style="text-align:center;">2.27</td>
+              <td style="text-align:center;">278.2</td>
+              <td style="text-align:center;"><strong>0.83</strong></td>
+              <td style="text-align:center;">0.57</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">MaskDiT<d-cite key="maskdit"></d-cite></td>
+              <td style="text-align:center;">1600</td>
+              <td style="text-align:center;">675M</td>
+              <td style="text-align:center;">5.69</td>
+              <td style="text-align:center;">177.9</td>
+              <td style="text-align:center;">0.74</td>
+              <td style="text-align:center;">0.60</td>
+              <td style="text-align:center;">2.28</td>
+              <td style="text-align:center;">276.6</td>
+              <td style="text-align:center;">0.80</td>
+              <td style="text-align:center;">0.61</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">SiT<d-cite key="sit"></d-cite></td>
+              <td style="text-align:center;">1400</td>
+              <td style="text-align:center;">675M</td>
+              <td style="text-align:center;">8.61</td>
+              <td style="text-align:center;">131.7</td>
+              <td style="text-align:center;">0.68</td>
+              <td style="text-align:center;">0.67</td>
+              <td style="text-align:center;">2.06</td>
+              <td style="text-align:center;">270.3</td>
+              <td style="text-align:center;">0.82</td>
+              <td style="text-align:center;">0.59</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">MDTv2<d-cite key="MDTv2"></d-cite></td>
+              <td style="text-align:center;">1080</td>
+              <td style="text-align:center;">675M</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">1.58</td>
+              <td style="text-align:center;">314.7</td>
+              <td style="text-align:center;">0.79</td>
+              <td style="text-align:center;">0.65</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;" rowspan="2">VA-VAE<d-cite key="lgt"></d-cite></td>
+              <td style="text-align:center;">80</td>
+              <td style="text-align:center;" rowspan="2">675M</td>
+              <td style="text-align:center;">4.29</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <!-- <td style="text-align:left; padding: 4px;">&nbsp;</td> -->
+              <td style="text-align:center;">800</td>
+              <td style="text-align:center;">2.17</td>
+              <td style="text-align:center;">205.6</td>
+              <td style="text-align:center;">0.77</td>
+              <td style="text-align:center;">0.65</td>
+              <td style="text-align:center;">1.35</td>
+              <td style="text-align:center;">295.3</td>
+              <td style="text-align:center;">0.79</td>
+              <td style="text-align:center;">0.65</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;" rowspan="2">REPA<d-cite key="repa"></d-cite></td>
+              <td style="text-align:center;">80</td>
+              <td style="text-align:center;" rowspan="2">675M</td>
+              <td style="text-align:center;">7.90</td>
+              <td style="text-align:center;">122.6</td>
+              <td style="text-align:center;">0.70</td>
+              <td style="text-align:center;">0.65</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <!-- <td style="text-align:left; padding: 4px;">&nbsp;</td> -->
+              <td style="text-align:center;">800</td>
+              <td style="text-align:center;">5.78</td>
+              <td style="text-align:center;">158.3</td>
+              <td style="text-align:center;">0.70</td>
+              <td style="text-align:center;">0.68</td>
+              <td style="text-align:center;">1.29</td>
+              <td style="text-align:center;">306.3</td>
+              <td style="text-align:center;">0.79</td>
+              <td style="text-align:center;">0.64</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;" rowspan="2">DDT<d-cite key="ddt"></d-cite></td>
+              <td style="text-align:center;">80</td>
+              <td style="text-align:center;" rowspan="2">675M</td>
+              <td style="text-align:center;">6.62</td>
+              <td style="text-align:center;">135.2</td>
+              <td style="text-align:center;">0.69</td>
+              <td style="text-align:center;">0.67</td>
+              <td style="text-align:center;">1.52</td>
+              <td style="text-align:center;">263.7</td>
+              <td style="text-align:center;">0.78</td>
+              <td style="text-align:center;">0.63</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <!-- <td style="text-align:left; padding: 4px;">&nbsp;</td> -->
+              <td style="text-align:center;">400</td>
+              <td style="text-align:center;">6.27</td>
+              <td style="text-align:center;">154.7</td>
+              <td style="text-align:center;">0.68</td>
+              <td style="text-align:center;"><strong>0.69</strong></td>
+              <td style="text-align:center;">1.26</td>
+              <td style="text-align:center;">310.6</td>
+              <td style="text-align:center;">0.79</td>
+              <td style="text-align:center;">0.65</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #000;">
+              <td style="text-align:left; padding: 4px;" rowspan="2">REPA-E <d-cite key="repa-e"></d-cite></td>
+              <td style="text-align:center;">80</td>
+              <td style="text-align:center;" rowspan="2">675M</td>
+              <td style="text-align:center;">3.46</td>
+              <td style="text-align:center;">159.8</td>
+              <td style="text-align:center;">0.77</td>
+              <td style="text-align:center;">0.63</td>
+              <td style="text-align:center;">1.67</td>
+              <td style="text-align:center;">266.3</td>
+              <td style="text-align:center;">0.80</td>
+              <td style="text-align:center;">0.63</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #000;">
+              <!-- <td style="text-align:left; padding: 4px;">&nbsp;</td> -->
+              <td style="text-align:center;">800</td>
+              <td style="text-align:center;">1.70</td>
+              <td style="text-align:center;">217.3</td>
+              <td style="text-align:center;">0.77</td>
+              <td style="text-align:center;">0.66</td>
+              <td style="text-align:center;">1.15</td>
+              <td style="text-align:center;">304.0</td>
+              <td style="text-align:center;">0.79</td>
+              <td style="text-align:center;">0.66</td>
+            </tr>
+            
+            <!-- Latent Diffusion with RAE (Ours) -->
+            <tr style="background-color: #f5f5f5;">
+              <td colspan="11" style="text-align:left; padding: 8px 4px; font-style: italic; font-weight: bold;">Latent Diffusion with RAE (Ours)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">DiT-XL (DINOv2-S)</td>
+              <td style="text-align:center;">800</td>
+              <td style="text-align:center;">676M</td>
+              <td style="text-align:center;">1.87</td>
+              <td style="text-align:center;">209.7</td>
+              <td style="text-align:center;">0.80</td>
+              <td style="text-align:center;">0.63</td>
+              <td style="text-align:center;">1.41</td>
+              <td style="text-align:center;">309.4</td>
+              <td style="text-align:center;">0.80</td>
+              <td style="text-align:center;">0.63</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;" rowspan="3">DiT<sup>DH</sup>-XL (DINOv2-B)</td>
+              <td style="text-align:center;">20</td>
+              <td style="text-align:center;" rowspan="3">839M</td>
+              <td style="text-align:center;">3.71</td>
+              <td style="text-align:center;">198.7</td>
+              <td style="text-align:center;"><strong>0.86</strong></td>
+              <td style="text-align:center;">0.50</td>
+              <td style="text-align:center;">--</td>
+              <td style="text-align:center;">--</td>
+              <td style="text-align:center;">--</td>
+              <td style="text-align:center;">--</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <!-- <td style="text-align:left; padding: 4px;">&nbsp;</td> -->
+              <td style="text-align:center;">80</td>
+              <td style="text-align:center;">2.16</td>
+              <td style="text-align:center;">214.8</td>
+              <td style="text-align:center;">0.82</td>
+              <td style="text-align:center;">0.59</td>
+              <td style="text-align:center;">--</td>
+              <td style="text-align:center;">--</td>
+              <td style="text-align:center;">--</td>
+              <td style="text-align:center;">--</td>
+            </tr>
+            <tr style="border-bottom: 2px solid #000;">
+              <!-- <td style="text-align:left; padding: 4px;">&nbsp;</td> -->
+              <td style="text-align:center;">800</td>
+              <td style="text-align:center;"><strong>1.51</strong></td>
+              <td style="text-align:center;"><strong>242.9</strong></td>
+              <td style="text-align:center;">0.79</td>
+              <td style="text-align:center;">0.63</td>
+              <td style="text-align:center;"><strong>1.13</strong></td>
+              <td style="text-align:center;">262.6</td>
+              <td style="text-align:center;">0.78</td>
+              <td style="text-align:center;"><strong>0.67</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <figcaption style="margin-top: 15px;">
+        <strong>Table 1: Class-conditional performance on ImageNet 256×256.</strong> 
+        RAE reaches an FID of 1.51 without guidance, outperforming all prior methods by a large margin. It also achieves an FID of 1.13 with AutoGuidance. We identified an inconsistency in the FID evaluation protocol in prior literature and re-ran the sampling process for several baselines. This resulted in higher baseline numbers than those originally reported.
+      </figcaption>
+    </figure>
+  </d-figure>
+
   <!-- Paragraph after second row -->
   <!-- <p>
     <strong>DiT<sup>DH</sup> maintains its advantage across RAE scales.</strong> We compare DiT<sup>DH</sup>-XL and DiT-XL on three RAE encoders—
