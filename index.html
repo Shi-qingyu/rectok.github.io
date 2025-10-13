@@ -102,6 +102,12 @@
                     <li><b>How well can diffusion transformers operate within the RAE latent space?</b></li>
                 </ul>
             </p>
+
+            <d-figure>
+              <figure class="l-body">
+              <img src="images/rae/arch_teaser_v1.png", alt="RAE architecture overview">
+              <figcaption style="margin-top:20px;"><strong>Comparison of SD-VAE and RAE <span style="font-size:0.8em;">(DINOv2-B)</span>.</strong> The VAE relies on convolutional backbones with aggressive down- and up-sampling, while the RAE uses a ViT architecture <em>without</em> compression. SD-VAE is also more computationally expensive, requiring about 6× and 3× more GFLOPs than RAE for the encoder and decoder, respectively. GFlops are evaluated on one 256×256 image.</figcaption>
+            </d-figure>
         </section>
         <section id="autoencoders">
             <h2>High Fidelity Reconstruction from RAE</h2> 
