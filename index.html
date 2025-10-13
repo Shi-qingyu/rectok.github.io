@@ -86,7 +86,7 @@
                 Since these latent spaces are typically high-dimensional, a key challenge is enabling diffusion transformers to operate effectively within them. We analyze the sources of this difficulty, propose theoretically motivated solutions, and validate them empirically.
             </p>
             <p>
-                Our approach achieves faster convergence without auxiliary representation alignment losses. Using a DiT variant equipped with a lightweight, wide DDT head, we achieve strong image generation results on ImageNet: <strong>1.51</strong> FID at 256x256 (no guidance) and <strong>1.16 / 1.13</strong> at 256x256 and 512x512 (with guidance). 
+                Our approach achieves faster convergence without auxiliary representation alignment losses. Using a DiT variant equipped with a lightweight, wide DDT head, we achieve strong image generation results on ImageNet: <strong>1.51</strong> FID at 256x256 (no guidance) and <strong>3 / 1.13</strong> at 256x256 and 512x512 (with guidance). 
                 RAE offers clear advantages and should be the new default for diffusion transformer training. 
             </p>
             <d-figure>
@@ -1262,14 +1262,7 @@
         <d-appendix>
             <h3>BibTeX</h3>
             <p class="bibtex">
-                @article{ma2024sit,<br>
-                &nbsp;&nbsp;title={SiT: Exploring Flow and Diffusion-based Generative Models with Scalable Interpolant Transformers},<br>
-                &nbsp;&nbsp;author={Nanye Ma and Mark Goldstein and Michael S. Albergo and Nicholas M. Boffi and Eric Vanden-Eijnden and Saining Xie},<br>
-                &nbsp;&nbsp;year={2024},<br>
-                &nbsp;&nbsp;eprint={2401.08740},<br>
-                &nbsp;&nbsp;archivePrefix={arXiv},<br>
-                &nbsp;&nbsp;primaryClass={cs.CV}<br>
-                }
+               
             </p>
             <d-footnote-list></d-footnote-list>
             <d-citation-list></d-citation-list>
