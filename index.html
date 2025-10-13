@@ -86,7 +86,7 @@
                 Since these latent spaces are typically high-dimensional, a key challenge is enabling diffusion transformers to operate effectively within them. We analyze the sources of this difficulty, propose theoretically motivated solutions, and validate them empirically.
             </p>
             <p>
-                Our approach achieves faster convergence without auxiliary representation alignment losses. Using a DiT variant equipped with a lightweight, wide DDT head, we achieve strong image generation results on ImageNet: <strong>1.51</strong> FID at 256x256 (no guidance) and <strong>1.16 / 1.13</strong> at 256x256 and 512x512 (with guidance). 
+                Our approach achieves faster convergence without auxiliary representation alignment losses. Using a DiT variant equipped with a lightweight, wide DDT head, we achieve strong image generation results on ImageNet: <strong>1.51</strong> FID at 256x256 (no guidance) and <strong>1.13 / 1.13</strong> at 256x256 and 512x512 (with guidance). 
                 RAE offers clear advantages and should be the new default for diffusion transformer training. 
             </p>
             <d-figure>
@@ -111,7 +111,7 @@
         </section>
         <section id="autoencoders">
             <h2>High Fidelity Reconstruction from RAE</h2> 
-            <p>   We challenge the common assumption that pretrained representation encoders, such as DINOv2 and SigLIP2, are unsuitable for the reconstruction task because they <em>“emphasize high-level semantics while downplaying low-level details”</em> [1, 2]. We show that, with a properly trained decoder, frozen SEM can in fact serve as strong encoders for the diffusion latent space. Our <strong>Representation Autoencoders (RAE)</strong> pair frozen, pretrained SEM with a ViT decoder, yielding reconstructions on par with—or even better than—SD-VAE. More importantly, RAEs alleviate the fundamental limitations of VAEs [3], whose heavily compressed latent space (e.g., SD-VAE maps 256<sup>2</sup> images to 32<sup>2</sup>×4 [4, 5] latents) restricts reconstruction fidelity and, more importantly, representation quality.</p>
+            <p>   We challenge the common assumption that pretrained representation encoders, such as DINOv2 and SigLIP2, are unsuitable for the reconstruction task because they <em>“emphasize high-level semantics while downplaying low-level details”</em><d-cite key="unilip"></d-cite> . We show that, with a properly trained decoder, frozen SEM can in fact serve as strong encoders for the diffusion latent space. Our <strong>Representation Autoencoders (RAE)</strong> pair frozen, pretrained SEM with a ViT decoder, yielding reconstructions on par with—or even better than—SD-VAE. More importantly, RAEs alleviate the fundamental limitations of VAEs <d-cite key="VAE"></d-cite>, whose heavily compressed latent space (e.g., SD-VAE maps 256<sup>2</sup> images to 32<sup>2</sup>×4 <d-cite key="LDM"></d-cite> latents) restricts reconstruction fidelity and, more importantly, representation quality.</p>
             <d-figure>
                 <figure class="l-body">
                     <img src="images/rae/reprdit_recon.png" alt="Reconstruction examples produced by RAEs">
@@ -128,6 +128,11 @@
             We next study the scaling behavior of both encoders and decoders. As shown in Table&nbsp;1c, reconstruction quality remains stable across DINOv2-S, B, and L, indicating that even small representation encoder models preserve sufficient low-level detail for decoding.
             On the decoder side (Table&nbsp;1b), increasing capacity consistently improves rFID: from 0.58 with ViT-B to 0.49 with ViT-XL.
             Importantly, ViT-B already outperforms SD-VAE while being 14× more efficient in GFLOPs, and ViT-XL further improves quality at only one-third of SD-VAE’s cost.
+
+            We also evaluate representation quality via linear probing on ImageNet-1K in Table&nbsp;1d.
+          Because RAEs use frozen pretrained encoders, they directly inherit the representations of the underlying encoders.
+          Since RAEs use frozen pretrained encoders, they retain the strong representations of the underlying representation encoders.
+          In contrast, SD-VAE achieves only approximately 8% accuracy.
             </p>
 <table style="width:100%; margin-top:25px; border-collapse:separate; border-spacing:12px;">
   <tr>
@@ -137,7 +142,7 @@
         <table class="display-table" style="width:100%;">
           <tr>
             <th>Decoder</th>
-            <th>rFID</th>
+            <th>rFID↓</th>
             <th>GFLOPs</th>
           </tr>
           <tr>
@@ -173,7 +178,7 @@
         <table class="display-table" style="width:100%;">
           <tr>
             <th>Encoder</th>
-            <th>rFID</th>
+            <th>rFID↓</th>
           </tr>
           <tr>
             <td style="text-align:left;">DINOv2-S</td>
@@ -200,7 +205,7 @@
         <table class="display-table" style="width:100%;">
           <tr>
             <th>Model</th>
-            <th>Top-1&nbsp;Acc.</th>
+            <th>Top-1&nbsp;Acc.↑</th>
           </tr>
           <tr>
             <td style="text-align:left;">DINOv2-B</td>
@@ -216,55 +221,10 @@
           </tr>
           <tr style="background-color:#f0f0f0; color:#666;">
             <td style="text-align:left;">SD-VAE</td>
-            <td>8.0</td>
+            <td>~8</td>
           </tr>
         </table>
         <figcaption style="text-align:center; margin-bottom:6px;">
-          RAEs have much higher linear probing accuracy than VAEs.
-        </figcaption>
-      </figure>
-    </td>
-  </tr>
-</table>
-
-<table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px;">
-  <tr>
-    <!-- Left column: text -->
-    <td style="vertical-align:top; width:60%; text-align:justify; font-size: 1em;">
-      <p>
-        We also evaluate representation quality via linear probing on ImageNet-1K in Table&nbsp;1d.
-        Because RAEs use frozen pretrained encoders, they directly inherit the representations of the underlying encoders.
-        Since RAEs use frozen pretrained encoders, they retain the strong representations of the underlying representation encoders.
-        In contrast, SD-VAE achieves only approximately 8% accuracy.
-      </p>
-    </td>
-
-    <!-- Right column: table with caption -->
-    <td style="vertical-align:top; width:40%;">
-      <figure>
-        <table class="display-table" style="width:100%;">
-          <tr>
-            <th>Model</th>
-            <th>Top-1&nbsp;Acc.</th>
-          </tr>
-          <tr>
-            <td style="text-align:left;">DINOv2-B</td>
-            <td><strong>84.5</strong></td>
-          </tr>
-          <tr>
-            <td style="text-align:left;">SigLIP-B</td>
-            <td>79.1</td>
-          </tr>
-          <tr>
-            <td style="text-align:left;">MAE-B</td>
-            <td>68.0</td>
-          </tr>
-          <tr style="background-color:#f0f0f0; color:#666;">
-            <td style="text-align:left;">SD-VAE</td>
-            <td>8.0</td>
-          </tr>
-        </table>
-                <figcaption style="text-align:center; margin-bottom:6px;">
           RAEs have much higher linear probing accuracy than VAEs.
         </figcaption>
       </figure>
@@ -443,7 +403,7 @@
                       <table class="display-table" style="width:60%;">
                         <tr>
                           <th>&nbsp;</th>
-                          <th style="text-align:center;">gFID</th>
+                          <th style="text-align:center;">gFID↓</th>
                         </tr>
                         <tr>
                           <td style="text-align:left;">w/o shift</td>
@@ -498,8 +458,8 @@
                       <table class="display-table" style="width:80%; font-size:0.9em;">
                         <tr>
                           <th>&nbsp;</th>
-                          <th style="text-align:center;">gFID</th>
-                          <th style="text-align:center;">rFID</th>
+                          <th style="text-align:center;">gFID↓</th>
+                          <th style="text-align:center;">rFID↓</th>
                         </tr>
                         <tr>
                           <td style="text-align:left;"> $\mathbf{z} \sim p(\mathbf{z})$</td>
@@ -594,7 +554,7 @@
         </section>
         <section id="sec-ddt" style="margin-top:24px;"> -->
 <section id="sec-ddt" style="margin-top:24px;">
-  <h2>Wide Diffusion Head</h2>
+  <h2>Improving the Model Scalability with Wide Diffusion Head</h2>
 
   <p>
     As discussed in <a href="#sec-theory">Section&nbsp;2</a>, within the standard DiT framework, handling higher-dimensional RAE latents
@@ -640,7 +600,7 @@
         onerror="this.outerHTML='<div class=&quot;todo&quot;>TODO: images/ditdh_vs_ditxl.png not found — please add the image.</div>'"
       />
       <figcaption style="font-size:0.85em;">
-        <strong>DiT<sup>DH</sup></strong> scales much better than large DiT.
+        <strong>DiT<sup>DH</sup></strong> scales much better than DiT.
       </figcaption>
     </figure>
 
@@ -652,7 +612,7 @@
         onerror="this.outerHTML='<div class=&quot;todo&quot;>TODO: images/convergence_teaser_standalone.png not found — please add the image.</div>'"
       />
       <figcaption style="font-size:0.85em;">
-        <strong>DiT<sup>DH</sup></strong> converges faster than VAE-based methods.
+        <strong>DiT<sup>DH</sup></strong> on RAE converges faster than VAE-based methods.
       </figcaption>
     </figure>
   </div>
@@ -662,7 +622,7 @@
     <strong>DiT<sup>DH</sup> converges faster than DiT.</strong> We train a series of DiT<sup>DH</sup> models with varying backbone sizes
     (DiT<sup>DH</sup>-S, B, L, and XL) on RAE latents.
     We use a 2-layer, 2048-dim DiT<sup>DH</sup> head for all models. Performance is compared against the standard DiT-XL baseline.
-    As shown in <a href="#fig-DiTvsDiTDH">Figure&nbsp;1a</a>, DiT<sup>DH</sup> is substantially more FLOP-efficient than DiT.
+    DiT<sup>DH</sup> is substantially more FLOP-efficient than DiT.
     For example, DiT<sup>DH</sup>-B requires only \( \sim 40\% \) of the training FLOPs yet outperforms DiT-XL by a large margin;
     when scaled to DiT<sup>DH</sup>-XL under a comparable training budget, it achieves an FID of 2.16—nearly half that of DiT-XL.
   </p>
@@ -1150,8 +1110,7 @@
   <p>
     Since the decoder is decoupled from both the encoder and the diffusion process, we can reuse diffusion models trained at
     256×256 resolution, simply swapping in an upsampling decoder to produce 512×512 outputs without retraining.
-    As shown in <a href="#tab-decoder_upsampling">Table&nbsp;1</a>, this approach slightly increases rFID but achieves
-    competitive gFID, while being 4× more efficient than quadrupling the number of tokens.
+    This approach slightly increases both rFID and gFID, but being 4× more efficient than quadrupling the number of tokens.
   </p>
 
   <div style="clear:both;"></div>
@@ -1183,7 +1142,7 @@
       </tr>
     </table>
     <figcaption style="font-size:0.85em; margin-top:4px;">
-      <strong>Performance on VAE.</strong> DiT<sup>DH</sup> yields worse FID than DiT, despite using extra compute for
+      <strong>gFID-50k on VAE.</strong> DiT<sup>DH</sup> yields worse FID than DiT, despite using extra compute for
       the wide head.
     </figcaption>
   </figure>
@@ -1225,7 +1184,7 @@
       </tr>
     </table>
     <figcaption style="font-size:0.85em; margin-top:4px;">
-      <strong>Comparison on pixel diffusion.</strong> Pixel diffusion performs far worse than diffusion on DINOv2-B
+      <strong>Comparison on pixel diffusion (gFID-50k).</strong> Pixel diffusion performs far worse than diffusion on DINOv2-B
       latents.
     </figcaption>
   </figure>
@@ -1263,9 +1222,9 @@
             <h3>BibTeX</h3>
             <p class="bibtex">
                 @article{ma2024sit,<br>
-                &nbsp;&nbsp;title={SiT: Exploring Flow and Diffusion-based Generative Models with Scalable Interpolant Transformers},<br>
-                &nbsp;&nbsp;author={Nanye Ma and Mark Goldstein and Michael S. Albergo and Nicholas M. Boffi and Eric Vanden-Eijnden and Saining Xie},<br>
-                &nbsp;&nbsp;year={2024},<br>
+                &nbsp;&nbsp;title={Diffusion Transformers with Representation Autoencoders},<br>
+                &nbsp;&nbsp;author={Boyang Zheng and Nanye Ma and Shengbang Tong and Saining Xie},<br>
+                &nbsp;&nbsp;year={2025},<br>
                 &nbsp;&nbsp;eprint={2401.08740},<br>
                 &nbsp;&nbsp;archivePrefix={arXiv},<br>
                 &nbsp;&nbsp;primaryClass={cs.CV}<br>
