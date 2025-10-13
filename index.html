@@ -58,8 +58,8 @@
                 <div class="byline-column">
                     <h3>Resources</h3>
                     <p><a href="ReprDiT_Boyang (24).pdf" class="affiliation-link">Paper (PDF)</a></p>
-                    <p><a href="https://github.com/rae-dit/RAE" class="affiliation-link">Code Repository</a></p>
-                    <p><a href="#" class="affiliation-link">Hugging Face Models</a></p>
+                    <p><a href="https://github.com/bytetriper/RAE" class="affiliation-link">Code Repository</a></p>
+                    <p><a href="https://huggingface.co/nyu-visionx/RAE-collections" class="affiliation-link">Hugging Face Models</a></p>
                 </div>
             </div>
         </div>
@@ -67,11 +67,11 @@
             <nav>
                 <h4>Contents</h4>
                 <div><a href="#overview">Overview</a></div>
-                <div><a href="#autoencoders">Representation Autoencoders</a></div>
-                <div><a href="#diffusion">Diffusion Transformers</a></div>
-                <div><a href="#scaling">Scaling and Efficiency</a></div>
-                <div><a href="#data">Data and Alignment</a></div>
-                <div><a href="#conclusion">Conclusion</a></div>
+                <div><a href="#autoencoders">High Fidelity Reconstruction from RAE</a></div>
+                <div><a href="#diffusion">Taming Diffusion Transformers for RAE</a></div>
+                <div><a href="#sec-ddt">Improve the Model Scalability with Wide Diffusion Head</a></div>
+                <div><a href="#sec-discussions">Discussions</a></div>
+                <div><a href="#sec-conclusion">Conclusion</a></div>
             </nav>
         </d-contents>
         <section id="overview">
@@ -553,6 +553,7 @@
             </d-figure>
         </section>
         <section id="sec-ddt" style="margin-top:24px;"> -->
+          </section>
 <section id="sec-ddt" style="margin-top:24px;">
   <h2>Improving the Model Scalability with Wide Diffusion Head</h2>
 
@@ -666,7 +667,7 @@
   <d-figure id="tab:comparison_perf">
     <figure style="margin: 20px 0;">
       <div style="overflow-x: auto;">
-        <table class="display-table" style="width: 100%; font-size: 0.6em !important; margin: 0 auto;">
+        <table class="display-table" style="width: 120%; font-size: 0.6em !important; margin: 0 auto;">
           <thead>
             <tr>
               <th style="text-align:left; border-bottom: 2px solid #000;">Method</th>
@@ -1025,6 +1026,132 @@
     </figure>
   </d-figure>
 
+  <d-figure id="tab:imagenet512_sota">
+    <figure style="margin: 20px 0;">
+      <div style="overflow-x: auto;">
+        <table class="display-table" style="width: 75%; font-size: 0.65em !important; margin: 0 auto;">
+          <thead>
+            <tr>
+              <th style="text-align:left; border-bottom: 2px solid #000;">Method</th>
+              <th colspan="4" style="text-align:center; border-bottom: 1px solid #000;">Generation@512</th>
+            </tr>
+            <tr>
+              <th style="border-bottom: 2px solid #000;"></th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">gFID↓</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">IS↑</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">Prec.↑</th>
+              <th style="text-align:center; border-bottom: 2px solid #000;">Rec.↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">BigGAN-deep<d-cite key="biggan"></d-cite></td>
+              <td style="text-align:center;">8.43</td>
+              <td style="text-align:center;">177.9</td>
+              <td style="text-align:center;"><strong>0.88</strong></td>
+              <td style="text-align:center;">0.29</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">StyleGAN-XL<d-cite key="styleganxl"></d-cite></td>
+              <td style="text-align:center;">2.41</td>
+              <td style="text-align:center;">267.8</td>
+              <td style="text-align:center;">0.77</td>
+              <td style="text-align:center;">0.52</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">VAR</td>
+              <td style="text-align:center;">2.63</td>
+              <td style="text-align:center;">303.2</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">MAGVIT-v2<d-cite key="magvitv2"></d-cite></td>
+              <td style="text-align:center;">1.91</td>
+              <td style="text-align:center;"><strong>324.3</strong></td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #000;">
+              <td style="text-align:left; padding: 4px;">XAR</td>
+              <td style="text-align:center;">1.70</td>
+              <td style="text-align:center;">281.5</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">ADM</td>
+              <td style="text-align:center;">3.85</td>
+              <td style="text-align:center;">221.7</td>
+              <td style="text-align:center;">0.84</td>
+              <td style="text-align:center;">0.53</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">SiD2</td>
+              <td style="text-align:center;">1.50</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">DiT</td>
+              <td style="text-align:center;">3.04</td>
+              <td style="text-align:center;">240.8</td>
+              <td style="text-align:center;">0.84</td>
+              <td style="text-align:center;">0.54</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">SiT</td>
+              <td style="text-align:center;">2.62</td>
+              <td style="text-align:center;">252.2</td>
+              <td style="text-align:center;">0.84</td>
+              <td style="text-align:center;">0.57</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">DiffiT<d-cite key="diffit"></d-cite></td>
+              <td style="text-align:center;">2.67</td>
+              <td style="text-align:center;">252.1</td>
+              <td style="text-align:center;">0.83</td>
+              <td style="text-align:center;">0.55</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">REPA</td>
+              <td style="text-align:center;">2.08</td>
+              <td style="text-align:center;">274.6</td>
+              <td style="text-align:center;">0.83</td>
+              <td style="text-align:center;">0.58</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="text-align:left; padding: 4px;">DDT</td>
+              <td style="text-align:center;">1.28</td>
+              <td style="text-align:center;">305.1</td>
+              <td style="text-align:center;">0.80</td>
+              <td style="text-align:center;"><strong>0.63</strong></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #000;">
+              <td style="text-align:left; padding: 4px;">EDM2<d-cite key="edm2"></d-cite></td>
+              <td style="text-align:center;">1.25</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+              <td style="text-align:center;">-</td>
+            </tr>
+            <tr style="border-bottom: 2px solid #000;">
+              <td style="text-align:left; padding: 4px;">DiT<sup>DH</sup>-XL (DINOv2-B)</td>
+              <td style="text-align:center;"><strong>1.13</strong></td>
+              <td style="text-align:center;">259.6</td>
+              <td style="text-align:center;">0.80</td>
+              <td style="text-align:center;"><strong>0.63</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <figcaption style="margin-top: 15px;">
+        <strong>Table 2: Class-conditional performance on ImageNet 512×512 with guidance.</strong> 
+        DiT<sup>DH</sup>-XL with 400-epoch training achieves a strong FID score of 1.13.
+      </figcaption>
+    </figure>
+  </d-figure>
+
   <!-- Paragraph after second row -->
   <!-- <p>
     <strong>DiT<sup>DH</sup> maintains its advantage across RAE scales.</strong> We compare DiT<sup>DH</sup>-XL and DiT-XL on three RAE encoders—
@@ -1149,8 +1276,7 @@
 
   <p>
     To investigate, we train both DiT-XL and DiT<sup>DH</sup>-XL on SD-VAE latents with a patch size of 2, alongside DINOv2-B
-    for comparison, for 80 epochs, and report unguided FID. As shown in
-    <a href="#tab-vae_dit_vs_ddt">Table&nbsp;2</a>, DiT<sup>DH</sup> performs even worse than DiT on SD-VAE, despite the
+    for comparison, for 80 epochs, and report unguided FID. As shown on the left, DiT<sup>DH</sup> performs even worse than DiT on SD-VAE, despite the
     additional computation introduced by the diffusion head. This indicates that the head provides little benefit in
     low-dimensional latent spaces, and its primary strength arises in high-dimensional diffusion tasks introduced by RAE.
   </p>
@@ -1192,8 +1318,7 @@
   <p>
     To evaluate this, we train DiT-XL and DiT<sup>DH</sup>-XL directly on raw pixels.
     For 256×256 images with a patch size of 16, the resulting DiT input token dimensionality is 16×16×3 = 768,
-    matching that of the DINOv2-B latents. We report unguided FID after 80 epochs. As shown in
-    <a href="#tab-pixel_dit_vs_ddt">Table&nbsp;3</a>, DiT<sup>DH</sup> outperforms DiT on pixels, but both models perform far
+    matching that of the DINOv2-B latents. We report unguided FID after 80 epochs. As shown on the right, DiT<sup>DH</sup> outperforms DiT on pixels, but both models perform far
     worse than their counterparts trained on RAE latents. These results demonstrate that high dimensionality alone is not
     sufficient—the structured representation provided by RAE is crucial for achieving strong performance gains.
   </p>
@@ -1235,7 +1360,7 @@
         </d-appendix>
 
         <!-- bibliography will be inlined during Distill pipeline's pre-rendering -->
-        <d-bibliography src="bibliography.bib"></d-bibliography>
+    <d-bibliography src="bibliography.bib"></d-bibliography>
     <script src="contents_bar.js"></script> <!-- for scroll/toc -->
     </body>
 </html>
