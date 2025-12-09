@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Diffusion Transformers with Representation Autoencoders</title>
+        <title>RecTok: Reconstruction Distillation along Rectified Flow</title>
         <script src="template.v2.js"></script>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="https://d3js.org/d3-collection.v1.min.js"></script>
@@ -29,8 +29,8 @@
     <body>
         <div class="header-container">
             <div class="header-content">
-              <h1>Diffusion Transformers with Representation Autoencoders</h1>
-              <p>Representation Autoencoders (RAEs) reuse pretrained, frozen representation encoders together with lightweight trained decoders to provide high-fidelity, semantically rich latents for diffusion transformers.</p>
+              <h1>RecTok: Reconstruction Distillation along Rectified Flow</h1>
+              <p>RecTok overcomes the limitations of latent space dimensionality, achieving state-of-the-art generation performance through a high-dimensional, semantically rich latent space.</p>
               <div class="button-container">
                 <a href="https://arxiv.org/abs/2510.11690" class="button">Paper</a>
                 <a href="https://github.com/bytetriper/RAE" class="button">Code</a>
@@ -46,20 +46,26 @@
             <div class="byline-container">
                 <div class="byline-column">
                     <h3>Authors</h3>
-                    <p><a href="http://bytetriper.github.io/" class="author-link">Boyang Zheng</a></p>
-                    <p><a href="https://willisma.github.io/" class="author-link">Nanye Ma</a></p>
-                    <p><a href="https://tsb0601.github.io/" class="author-link">Shengbang Tong</a></p>
-                    <p><a href="https://www.sainingxie.com/" class="author-link">Saining Xie</a></p>
+                    <p><a href="http://bytetriper.github.io/" class="author-link">Qingyu Shi</a></p>
+                    <p><a href="https://wusize.github.io/" class="author-link">Size Wu</a></p>
+                    <p><a href="https://noyii.github.io/" class="author-link">Jinbin Bai</a></p>
+                    <p><a href="https://openreview.net/profile?id=%7EKaidong_Yu1" class="author-link">Kaidong Yu</a></p>
+                    <p><a href="https://scholar.google.com/citations?user=YgL4rywAAAAJ&hl=en" class="author-link">Yujing Wang</a></p>
+                    <p><a href="https://scholar.google.com/citations?user=T4gqdPkAAAAJ&hl=zh-CN" class="author-link">Yunhai Tong</a></p>
+                    <p><a href="https://lxtgh.github.io/" class="author-link">Xiangtai Li</a></p>
+                    <p><a href="https://scholar.google.com/citations?user=ahUibskAAAAJ&hl=zh-CN" class="author-link">Xuelong Li</a></p>
                 </div>
                 <div class="byline-column">
                     <h3>Affiliations</h3>
-                    <p><a href="https://cs.nyu.edu/home/index.html" class="affiliation-link">New York University</a></p>
+                      <p><a href="https://www.pku.edu.cn/" class="affiliation-link">Peking University</a></p>
+                      <p><a href="https://www.ntu.edu.sg/" class="affiliation-link">Nanyang Technological University</a></p>
+                      <p><a href="https://github.com/Tele-AI" class="affiliation-link">Tele AI</a></p>
                 </div>
                 <div class="byline-column">
                     <h3>Resources</h3>
                     <p><a href="https://arxiv.org/abs/2510.11690" class="affiliation-link">Paper</a></p>
-                    <p><a href="https://github.com/bytetriper/RAE" class="affiliation-link">Code Repository</a></p>
-                    <p><a href="https://huggingface.co/collections/nyu-visionx/rae-68ecb57b8bfbf816c83cce15" class="affiliation-link">Hugging Face Models</a></p>
+                    <p><a href="https://github.com/Shi-qingyu/RecTok" class="affiliation-link">Code Repository</a></p>
+                    <p><a href="https://huggingface.co/QingyuShi/RecTok" class="affiliation-link">Hugging Face Models</a></p>
                 </div>
             </div>
         </div>
@@ -67,10 +73,10 @@
             <nav>
                 <h4>Contents</h4>
                 <div><a href="#overview">Overview</a></div>
-                <div><a href="#autoencoders">High Fidelity Reconstruction from RAE</a></div>
-                <div><a href="#diffusion">Taming Diffusion Transformers for RAE</a></div>
-                <div><a href="#sec-ddt">Improve the Model Scalability with Wide Diffusion Head</a></div>
-                <div><a href="#sec-discussions">Discussions</a></div>
+                <div><a href="#autoencoders">Motivation</a></div>
+                <div><a href="#diffusion">Insight</a></div>
+                <div><a href="#sec-ddt">Improve the Semantics along the Forward Flow</a></div>
+                <div><a href="#sec-discussions">Experiment</a></div>
                 <div><a href="#sec-conclusion">Conclusion</a></div>
             </nav>
         </d-contents>
