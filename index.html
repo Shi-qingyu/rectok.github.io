@@ -104,8 +104,8 @@
 
     <d-figure>
       <figure class="l-body">
-        <img src="images/rae/arch_teaser_v1.png", alt="RAE architecture overview">
-        <figcaption style="margin-top:20px;"><strong>Comparison of SD-VAE and RAE <span style="font-size:0.8em;">(DINOv2-B)</span>.</strong> The VAE relies on convolutional backbones with aggressive down- and up-sampling, while the RAE uses a ViT architecture <em>without</em> compression. SD-VAE is also more computationally expensive, requiring about 6× and 3× more GFLOPs than RAE for the encoder and decoder, respectively. GFlops are evaluated on one 256×256 image.</figcaption>
+        <img src="images/rectok/teaser.png", alt="RAE architecture overview">
+        <figcaption style="margin-top:20px;"></figcaption>
     </d-figure>
 </section>
 
@@ -114,147 +114,29 @@
 
     <h3>The Dimension Dilemma of Visual Tokenizers.</h3> 
     <p>   
-      However, 
+      Increasing the latent dimension presents a challenge, as it often compromises the model's generation ability. 
+      So previous tokenizers such as SD-VAE and SD3-VAE are restricted to a low-dimensional space, which in turn limits both reconstruction fidelity and semantic expressiveness.
     </p>
 
     <d-figure>
         <figure class="l-body">
-            <img src="images/rae/reprdit_recon.png" alt="Reconstruction examples produced by RAEs">
-            <figcaption>Reconstruction examples with a frozen DINOv2-B encoder. Even small RAEs rival SD-VAE quality while keeping rich semantic tokens.</figcaption>
+            <img src="images/rectok/dim_dilemma.png" alt="Reconstruction examples produced by RAEs">
+            <figcaption></figcaption>
         </figure>
     </d-figure>
 
     <h3>Semantic Enhancement in the Latent Space.</h3>
     <p>
-    As shown below, RAEs achieve consistently better reconstruction quality (rFID) than SD-VAE.
-    For instance, RAE with MAE-B/16 reaches an rFID of 0.16, clearly outperforming SD-VAE and challenging the assumption that representation encoders cannot recover pixel-level detail.
+    To address this limitation, previous methods distill semantic information from vision foundation models into the latent space, aiming to enrich representation capacity and accelerate generative convergence. 
+    These works effectively increase the dimension of latent space from 16 to 32.
     </p>
 
-    <p>
-    We next study the scaling behavior of both encoders and decoders. As shown in Table&nbsp;1c, reconstruction quality remains stable across DINOv2-S, B, and L, indicating that even small representation encoder models preserve sufficient low-level detail for decoding.
-    On the decoder side (Table&nbsp;1b), increasing capacity consistently improves rFID: from 0.58 with ViT-B to 0.49 with ViT-XL.
-    Importantly, ViT-B already outperforms SD-VAE while being 14x more efficient in GFLOPs, and ViT-XL further improves quality at only one-third of SD-VAE's cost.
-
-    We also evaluate representation quality via linear probing on ImageNet-1K in Table&nbsp;1d.
-    Because RAEs use frozen pretrained encoders, they directly inherit the representations of the underlying encoders.
-    Since RAEs use frozen pretrained encoders, they retain the strong representations of the underlying representation encoders.
-    In contrast, SD-VAE achieves only approximately 8% accuracy.
-    </p>
-
-    <table style="width:100%; margin-top:25px; border-collapse:separate; border-spacing:12px;">
-      <tr>
-        <!-- (a) Larger decoders -->
-        <td style="vertical-align:top; width:33%;">
-          <figure>
-            <table class="display-table" style="width:100%;">
-              <tr>
-                <th>Decoder</th>
-                <th>rFID↓</th>
-                <th>GFLOPs</th>
-              </tr>
-              <tr>
-                <td style="text-align:left;">ViT-B</td>
-                <td>0.58</td>
-                <td>22.2</td>
-              </tr>
-              <tr>
-                <td style="text-align:left;">ViT-L</td>
-                <td>0.50</td>
-                <td>78.1</td>
-              </tr>
-              <tr>
-                <td style="text-align:left;">ViT-XL</td>
-                <td><strong>0.49</strong></td>
-                <td>106.7</td>
-              </tr>
-              <tr style="background-color:#f0f0f0; color:#666;">
-                <td style="text-align:left;">SD-VAE</td>
-                <td>0.62</td>
-                <td>310.4</td>
-              </tr>
-            </table>
-            <figcaption style="text-align:center; margin-bottom:6px;">
-              Larger decoders improve rFID while remaining much more efficient than VAEs.
-            </figcaption>
-          </figure>
-        </td>
-
-        <!-- (b) Encoder scaling -->
-        <td style="vertical-align:top; width:33%;">
-          <figure>
-            <table class="display-table" style="width:100%;">
-              <tr>
-                <th>Encoder</th>
-                <th>rFID↓</th>
-              </tr>
-              <tr>
-                <td style="text-align:left;">DINOv2-S</td>
-                <td>0.52</td>
-              </tr>
-              <tr>
-                <td style="text-align:left;">DINOv2-B</td>
-                <td><strong>0.49</strong></td>
-              </tr>
-              <tr>
-                <td style="text-align:left;">DINOv2-L</td>
-                <td>0.52</td>
-              </tr>
-            </table>
-                <figcaption style="text-align:center; margin-bottom:6px;">
-              Encoder scaling — rFID remains stable across RAE sizes.
-            </figcaption>
-          </figure>
-        </td>
-
-        <!-- (c) Representation quality -->
-        <td style="vertical-align:top; width:33%;">
-          <figure>
-            <table class="display-table" style="width:100%;">
-              <tr>
-                <th>Model</th>
-                <th>Top-1&nbsp;Acc.↑</th>
-              </tr>
-              <tr>
-                <td style="text-align:left;">DINOv2-B</td>
-                <td><strong>84.5</strong></td>
-              </tr>
-              <tr>
-                <td style="text-align:left;">SigLIP-B</td>
-                <td>79.1</td>
-              </tr>
-              <tr>
-                <td style="text-align:left;">MAE-B</td>
-                <td>68.0</td>
-              </tr>
-              <tr style="background-color:#f0f0f0; color:#666;">
-                <td style="text-align:left;">SD-VAE</td>
-                <td>~8</td>
-              </tr>
-            </table>
-            <figcaption style="text-align:center; margin-bottom:6px;">
-              RAEs have much higher linear probing accuracy than VAEs.
-            </figcaption>
-          </figure>
-        </td>
-      </tr>
-    </table>
-</section>
-
-<section id="insight">
-  <h2>Insight</h2>
-  <p>
-    With RAE demonstrating good reconstruction quality, we now proceed to investigate the <em>diffusability</em><dite key="ImprovDiffus"></dite> of its latent space;
-    that is, how easily its latent distribution can be modeled by a diffusion model, and how good the generation performance can be.
-    Empirically, despite the superior reconstruction quality of MAE encoders,
-    we found that DINOv2 produces the strongest generation results, so we adopt it as the default, unless otherwise specified.
-  </p>
-  <p>
-    Following standard practice, we adopt the flow matching objective<dite key="fm"></dite><dite key="rf"></dite> to train the diffusion model, for which we use LightningDiT<dite key="lgt"></dite>, a variant of DiT, as our model backbone.
-  </p>
-  <p>
-    We adopt a patch size of 1, which results in a token length of 256 for all RAEs on 256x256 images, matching the sequence length used by VAE-based DiTs. We note that, Since the
-    computational cost of DiT depends primarily on the sequence length, <b>using RAE latents on DiTs will not incur additional computational cost compared to using VAE latents.</b>
-  </p>
+    <d-figure>
+        <figure class="l-body">
+            <img src="images/rectok/recent_works.png" alt="Reconstruction examples produced by RAEs">
+            <figcaption></figcaption>
+        </figure>
+    </d-figure>
 
   <div style="max-width: 1000px; margin: 0 auto;">
     <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
@@ -262,54 +144,65 @@
         <!-- Left column: text -->
         <td style="vertical-align:top; width:60%; text-align:justify; font-size: 1em;">
           <p>
-            <b>DiT Does Not Work Out of the Box.</b> Surprisingly, the standard diffusion recipe fails with RAE: 
-            training directly on RAE latents causes a small backbone such as DiT-S to completely fail, while a larger backbone like DiT-XL significantly underperforms it's counterpart with the SD-VAE latents.
-            To investigate this observation, we raise several hypotheses detailed below, which we will discuss in the following sections:
+          However, their generation quality in high dimensions still lags behind their low-dimensional counterparts. 
+          As shown in the figure below, continuous to expand the latent dimension still leads to the degradation of generation quality. 
+          This bottleneck restrict the reconstruction and semantics of the visual tokenizers. 
+          On the contrary, our RecTok overcome this bottleneck, we increase the dimension of latent space to 128 with consistent gain in reconstruction, generation, and linear probing.
           </p>
         </td>
         <!-- Right column: table -->
         <td style="vertical-align:top; width:40%;">
-          <figure>
-            <table class="display-table" style="width:100%;">
-              <tr>
-                <th>&nbsp;</th>
-                <th style="text-align:center;">RAE</th>
-                <th style="text-align:center;">SD-VAE</th>
-              </tr>
-              <tr>
-                <td style="text-align:left;">DiT-S</td>
-                <td>215.76</td>
-                <td><strong>51.74</strong></td>
-              </tr>
-              <tr>
-                <td style="text-align:left;">DiT-XL</td>
-                <td>23.08</td>
-                <td><strong>7.13</strong></td>
-              </tr>
-            </table>
-            <figcaption style="font-size: 1em; text-align:center; margin-top:10px;">Standard DiT struggles to model RAE's latent distribution.</figcaption>
+          <d-figure>
+              <figure class="l-body">
+                  <img src="images/rectok/motivation.png" alt="Reconstruction examples produced by RAEs">
+                  <figcaption></figcaption>
+              </figure>
+          </d-figure>
+        </td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<section id="insight">
+  <h2>Insight</h2>
+  <p>
+  Unlike previous works that directly inject semantics to the un-noised latent space, 
+  our core insight is the denoising network is trained on the forward flow instead of the latent space, as shown in figure A. 
+  To understand the importance of semantic consistency along the flow, we first evaluate the discriminative capability on the flow. As shown in figure B, 
+  the linear probing accuracy of the previous tokenizer drops remarkably as the latent is propagated along the forward flow, the representations that DiT receives during diffusion training.
+  </p>
+
+  <d-figure>
+      <figure class="l-body">
+          <img src="images/rectok/insight.png" alt="Reconstruction examples produced by RAEs">
+          <figcaption></figcaption>
+      </figure>
+  </d-figure>
+
+
+  <h3>Enhacing the Semantics along the Rectified Flow</h3>
+
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
+      <tr>
+        <!-- Left column: text -->
+        <td style="vertical-align:top; width:60%; text-align:justify; font-size: 1em;">
+          <p>
+          We take a more training consistent perspective: since DiT is trained on the forward flow rather than on latent feature, 
+          we enhance the semantics of all flow states through two key innovations: Flow Semantic Distillation, FSD for short and Reconstruction and Alignment Distillation, RAD for short.
+          </p>
+        </td>
+        <!-- Right column: table -->
+        <td style="vertical-align:top; width:40%;">
+          <figure class="l-body">
+              <img src="images/rectok/insight2.png" alt="Reconstruction examples produced by RAEs">
+              <figcaption></figcaption>
           </figure>
         </td>
       </tr>
     </table>
   </div>
-
-  <div class="finding-box", style="margin-top: -20px;">
-    <ul>
-      <li><strong>Suboptimal design for diffusion transformers.</strong> When modeling high-dimensional RAE tokens, the optimal design choices for diffusion transformers can diverge from the standard DiT, which was originally tailored for low-dimensional VAE tokens.</li>
-      <li><strong>Suboptimal noise scheduling.</strong> Prior noise scheduling and loss re-weighting tricks are derived for image-based or VAE-based input, and it remains unclear if they transfer well to high-dimension semantic tokens.</li>
-      <li><strong>Diffusion generates noisy latents.</strong> VAE decoders are trained to reconstruct images from noisy latents, making them more tolerant to small noises in diffusion outputs. In contrast, RAE decoders are trained on clean latents and may struggle to generalize.</li>
-    </ul>
-  </div>
-
-
-  <h3>Enhacing the Semantics along the Rectified Flow</h3>
-
-  <p>
-    To better understand the training dynamics of Diffusion Transformers in RAE latent space, we construct a simplified experiment:
-    we randomly select <b>a single image</b>, encode it by RAE, and test whether the diffusion model can <em>reconstruct</em> it. Starting from a DiT-S, we first vary the model width while fixing depth.
-    We fix the RAE encoder to DINOv2-B with token dimension of 768.
-  </p>
 
   <p>
     As shown in the following figure<a href="#fig-overfit_width"></a>, sample quality is poor when the model width $d < $ token dimension $n=768$,
@@ -517,7 +410,7 @@
                 <img src="images/rae/convergence_compare.png" alt="Convergence comparison between RAEs and SD-VAE">
                 <figcaption>Training convergence on ImageNet 256×256: RAEs reach strong sample quality in one tenth the number of updates.</figcaption>
             </figure>
-        </d-figure>
+          </d-figure>
         </td>
         
       </tr>
@@ -530,24 +423,36 @@
 <section id="rectok" style="margin-top:24px;">
   <h2>RecTok</h2>
 
+  <div class="finding-box", style="margin-top: -20px;">
+    <ul>
+      <li><strong>Flow Semantic Distillation.</strong> .</li>
+      <li><strong>Reconstruction and Alignment Distillation.</strong> .</li>
+    </ul>
+  </div>
+
+  <h3>Flow Semantic Distillation</h3>
+
   <p>
-    As discussed in <a href="#sec-theory">Section&nbsp;2</a>, within the standard DiT framework, handling higher-dimensional RAE latents
-    requires scaling up the width of the entire backbone, which quickly becomes computationally expensive.
-    To overcome this limitation, we draw inspiration from DDT <d-cite key="ddt"></d-cite> and introduce the
-    DDT head</strong>—a <em>shallow yet wide</em> transformer module dedicated to denoising.
-    By attaching this head to a standard DiT, we effectively increase model width without incurring quadratic growth in FLOPs.
-    We refer to this augmented architecture as <strong>DiT<sup>DH</sup></strong>.
+    First we will introduce the Flow Semantic Distillation. 
+    We distill the semantics of the vision foundation model into the forward flow trajectory, which represents the interpolation of clean data and noise. We utilize a cosine similarity loss as the distillation loss
   </p>
 
-  <figure style="float:left; width:32%; margin:0.5rem 1rem 0.5rem 0;">
-    <img
-      src="images/DDT_arch.png"
-      alt="The Wide DDT Head architecture"
-      style="width:100%; height:auto; border:0;"
-      onerror="this.outerHTML='<div class=&quot;todo&quot;>TODO: images/DDT_arch.png not found — please add the image.</div>'"
-    />
-    <figcaption style="font-size:0.9em;"><strong>The Wide DDT Head.</strong></figcaption>
+  <figure class="l-body">
+      <img src="images/rectok/fsd.png" alt="Convergence comparison between RAEs and SD-VAE">
+      <figcaption>Training convergence on ImageNet 256×256: RAEs reach strong sample quality in one tenth the number of updates.</figcaption>
   </figure>
+
+  <h3>Reconstruction and Alignment Distillation</h3>
+  <p>
+    To further enhance the semantic along the forward flow, inspired by masked image modeling methods, which obtain semantically rich features through pixel or feature reconstruction, we introduce a reconstructive target during FSD. 
+    Specifically, we apply random masks to the input image and reconstruct the missing regions based on the visible noisy latent features. We details the model design in the figure below.
+  </p>
+
+  <figure class="l-body">
+      <img src="images/rectok/rad.png" alt="Convergence comparison between RAEs and SD-VAE">
+      <figcaption>Training convergence on ImageNet 256×256: RAEs reach strong sample quality in one tenth the number of updates.</figcaption>
+  </figure>
+
 
   <p style="margin-top:0;">
     <strong>Wide DDT Head.</strong> Formally, a DiT<sup>DH</sup> model consists of a base DiT <span class="math">\(M\)</span>
