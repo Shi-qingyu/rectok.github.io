@@ -143,14 +143,14 @@
     <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
       <tr>
         <!-- Left column: text -->
-        <td style="vertical-align:top; width:50%; text-align:justify; font-size: 1em;">
+        <td style="vertical-align:top; width:40%; text-align:justify; font-size: 1em;">
           <p>
           However, their generation quality in high dimensions still lags behind their low-dimensional counterparts: continuous to expand the latent dimension still leads to the degradation of generation quality. 
           On the contrary, RecTok overcome this bottleneck, we increase the dimension of latent space to 128 with consistent gain in reconstruction, generation, and linear probing.
           </p>
         </td>
         <!-- Right column: table -->
-        <td style="vertical-align:top; width:50%;">
+        <td style="vertical-align:top; width:60%;">
           <d-figure>
               <figure class="l-body">
                   <img src="images/rectok/motivation.png" alt="Reconstruction examples produced by RAEs">
@@ -286,7 +286,7 @@
         <!-- Right column: table -->
         <td style="vertical-align:top; width:50%;">
           <figure class="l-body">
-              <img src="images/rectok/insight2.png" alt="Reconstruction examples produced by RAEs">
+              <img src="images/rectok/tokenizer_comp.png" alt="Reconstruction examples produced by RAEs">
               <figcaption></figcaption>
           </figure>
         </td>
@@ -296,117 +296,89 @@
 
   <h3>Generation Performance</h3>
   <p>
-    In this work, we propose and study RAE and DiT<sup>DH</sup>. In <a href="#sec-theory">Section&nbsp;2</a>, we showed that
-    RAE combined with DiT already brings substantial benefits, even without the additional head.
-    Here, we turn the question around: can DiT<sup>DH</sup> still provide improvements without the latent space of RAE?
+    We compare RecTok against other representative tokenizers and fast convergence methods. RecTok reaches an FID of 1.34 and an IS of 254.6 without guidance, outperforming previous methods by a large margin. 
+    With AutoGuidance, it achieves an FID of 1.13 and an IS of 289.2 using only 600 epochs, representing the best overall performance.
   </p>
 
-  <figure style="float:left; width:40%; margin:0.5rem 1rem 0.5rem 0;">
-    <table class="display-table" style="width:100%; font-size:0.9em;">
-      <tr>
-        <th></th>
-        <th>VAE</th>
-        <th>DINOv2-B</th>
-      </tr>
-      <tr>
-        <td style="text-align:left;">DiT-XL</td>
-        <td>7.13</td>
-        <td>4.28</td>
-      </tr>
-      <tr style="background:#f7f7f7;">
-        <td style="text-align:left;">DiT<sup>DH</sup>-XL</td>
-        <td>11.70</td>
-        <td><strong>2.16</strong></td>
-      </tr>
-    </table>
-    <figcaption style="font-size:0.85em; margin-top:4px;">
-      <strong>gFID-50k on VAE.</strong> DiT<sup>DH</sup> yields worse FID than DiT, despite using extra compute for
-      the wide head.
-    </figcaption>
+  <figure class="l-body">
+    <img src="images/rectok/gen_res.png" alt="FSD">
+    <figcaption>Quantitative results on ImageNet-1K 256x256.</figcaption>
   </figure>
 
   <h3>The Dimension of Latent Space</h3>
-  <p>
-    DiT<sup>DH</sup> achieves strong performance when paired with the high-dimensional latent space of RAE.
-    This raises a key question: is the structured representation of RAE essential, or would DiT<sup>DH</sup> work equally well
-    on unstructured high-dimensional inputs such as <em>raw pixels</em>?
-  </p>
 
-  <figure style="float:right; width:40%; margin:0.5rem 0 0.5rem 1rem;">
-    <table class="display-table" style="width:100%; font-size:0.9em;">
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
       <tr>
-        <th></th>
-        <th>Pixel</th>
-        <th>DINOv2-B</th>
-      </tr>
-      <tr>
-        <td style="text-align:left;">DiT-XL</td>
-        <td>51.09</td>
-        <td>4.28</td>
-      </tr>
-      <tr style="background:#f7f7f7;">
-        <td style="text-align:left;">DiT<sup>DH</sup>-XL</td>
-        <td>30.56</td>
-        <td><strong>2.16</strong></td>
+        <!-- Left column: text -->
+        <td style="vertical-align:top; width:50%; text-align:justify; font-size: 1em;">
+          <p>
+            Using these two key innovations, we gradually increase the dimensionality of the latent space and observe consistent performance improvements in reconstruction, generation and linear probing. 
+            To the best of our knowledge, RecTok is the first work that obtain this phenomenon.
+          </p>
+        </td>
+        <!-- Right column: table -->
+        <td style="vertical-align:top; width:50%;">
+          <figure class="l-body">
+              <img src="images/rectok/dim.png" alt="plot dim vs performance">
+              <figcaption></figcaption>
+          </figure>
+        </td>
       </tr>
     </table>
-    <figcaption style="font-size:0.85em; margin-top:4px;">
-      <strong>Comparison on pixel diffusion (gFID-50k).</strong> Pixel diffusion performs far worse than diffusion on DINOv2-B
-      latents.
-    </figcaption>
+  </div>
+
+  <figure class="l-body">
+    <img src="images/rectok/dim_table.png" alt="FSD">
+    <figcaption>Ablation Studies.</figcaption>
   </figure>
 
-  <h3>T</h3>
+  <h3>Ablation Studies</h3>
   <p>
-    DiT<sup>DH</sup> achieves strong performance when paired with the high-dimensional latent space of RAE.
-    This raises a key question: is the structured representation of RAE essential, or would DiT<sup>DH</sup> work equally well
-    on unstructured high-dimensional inputs such as <em>raw pixels</em>?
+    We present the overall ablation results in the table below, which clearly demonstrate the performance gains contributed by each proposed component.
   </p>
 
-  <figure style="float:right; width:40%; margin:0.5rem 0 0.5rem 1rem;">
-    <table class="display-table" style="width:100%; font-size:0.9em;">
-      <tr>
-        <th></th>
-        <th>Pixel</th>
-        <th>DINOv2-B</th>
-      </tr>
-      <tr>
-        <td style="text-align:left;">DiT-XL</td>
-        <td>51.09</td>
-        <td>4.28</td>
-      </tr>
-      <tr style="background:#f7f7f7;">
-        <td style="text-align:left;">DiT<sup>DH</sup>-XL</td>
-        <td>30.56</td>
-        <td><strong>2.16</strong></td>
-      </tr>
-    </table>
-    <figcaption style="font-size:0.85em; margin-top:4px;">
-      <strong>Comparison on pixel diffusion (gFID-50k).</strong> Pixel diffusion performs far worse than diffusion on DINOv2-B
-      latents.
-    </figcaption>
+  <figure class="l-body">
+    <img src="images/rectok/abl.png" alt="FSD">
+    <figcaption>Ablation Studies.</figcaption>
   </figure>
+
+  <h3>Latent Feature Visulization</h3>
+  <p>
+    We visualize the PCA, similarity heatmap, and t-SNE, where RecTok exhibits a semantically rich latent space and forward flow. 
+  </p>
+
+  <figure class="l-body">
+    <img src="images/rectok/pca.png" alt="FSD">
+    <figcaption>Ablation Studies.</figcaption>
+  </figure>
+
+  <figure class="l-body">
+    <img src="images/rectok/cossim.png" alt="FSD">
+    <figcaption>Ablation Studies.</figcaption>
+  </figure>
+
+  <figure class="l-body">
+    <img src="images/rectok/tsne.png" alt="FSD">
+    <figcaption>Ablation Studies.</figcaption>
+  </figure>
+
 </section>
 
 <section id="conclusion" style="margin-top:40px;">
   <h2>Conclusion</h2>
 
   <p>
-    In this work, we challenge the belief that pretrained representation encoders are too high-dimensional and too semantic
-    for reconstruction or generation. We show that a frozen representation encoder, paired with a lightweight trained decoder,
-    forms an effective <strong>Representation Autoencoder (RAE)</strong>. On this latent space, we train Diffusion Transformers
-    in a stable and efficient way with three added components: (1) match DiT width to the encoder token dimensionality,
-    (2) apply a dimension-dependent shift to the noise schedule, and (3) add decoder noise augmentation so the decoder
-    handles diffusion outputs. We also introduce <strong>DiT<sup>DH</sup></strong>, a shallow-but-wide diffusion transformer
-    head that increases width without quadratic compute. Empirically, RAEs enable strong visual generation: on ImageNet, our
-    RAE-based DiT<sup>DH</sup>-XL achieves an FID of <strong>1.51</strong> at 256×256 (no guidance) and
-    <strong>1.13 / 1.13</strong> at 256×256 and 512×512 (with guidance). We believe RAE latents serve as a strong candidate
-    for training diffusion transformers efficiently and robustly in future generative modeling research.
+  In this work, we address the fundamental challenge posed by the latent dimensionality of visual tokenizers through RecTok.
+  Building on our core insight---enhancing semantic consistency along the forward flow rather than only at the un-noised latents. We introduce two key innovations: Flow Semantic Distillation (FSD) and Reconstruction and Alignment Distillation (RAD).
+  Together, FSD and RAD effectively enrich the semantics of RecTok's latent space, and we observe consistent improvements as the latent dimension increases.
+  Experiments on ImageNet-1K demonstrate that RecTok achieves state-of-the-art generation performance while maintaining strong reconstruction quality and semantic representation. 
+  We hope this work inspires future research on high-dimensional visual tokenizers.
   </p>
 </section>
 
     </d-article>
-        <d-appendix>
+        <!-- <d-appendix>
             <h3>BibTeX</h3>
             <p class="bibtex">
                 @misc{zheng2025diffusiontransformersrepresentationautoencoders,<br>
@@ -420,7 +392,7 @@
             </p>
             <d-footnote-list></d-footnote-list>
             <d-citation-list></d-citation-list>
-        </d-appendix>
+        </d-appendix> -->
 
         <!-- bibliography will be inlined during Distill pipeline's pre-rendering -->
     <d-bibliography src="bibliography.bib"></d-bibliography>
