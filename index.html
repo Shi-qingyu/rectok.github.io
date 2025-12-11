@@ -127,23 +127,14 @@
 
     <h3>Semantic Enhancement in the Latent Space.</h3>
     <p>
-    To address this limitation, previous methods distill semantic information from vision foundation models into the latent space, aiming to enrich representation capacity and accelerate generative convergence. 
-    </p>
-
-    <d-figure>
-        <figure class="l-body">
-            <img src="images/rectok/recent_works.png" alt="Reconstruction examples produced by RAEs">
-            <figcaption></figcaption>
-        </figure>
-    </d-figure>
-
-    <p>
+    To address this limitation, previous methods distill semantic information from vision foundation models into the latent space, 
+    aiming to enrich the latent representation capacity and accelerate downstream generation training's convergence. 
     These works effectively increase the dimension of latent space from 16 to 32.
     </p>
   
     <d-figure>
         <figure class="l-body">
-            <img src="images/rectok/recent_works2.png" alt="Reconstruction examples produced by RAEs">
+            <img src="images/rectok/recent_works2.png" alt="Recent works">
             <figcaption></figcaption>
         </figure>
     </d-figure>
@@ -211,8 +202,6 @@
       </tr>
     </table>
   </div>
-
-  <p>In the following sections, we introduce our RecTok based on two core innovations.</p>
 </section>
 
 <section id="rectok" style="margin-top:24px;">
@@ -220,12 +209,30 @@
 
   <div class="finding-box", style="margin-top: -20px;">
     <ul>
-      <li><strong>Flow Semantic Distillation.</strong> Make every point $x_t$ along the forward flow discriminative and semantically rich.</li>
-      <li><strong>Reconstruction and Alignment Distillation.</strong> Further enhance the semantics through reconstruction target.</li>
+      <li><strong>Flow Semantic Distillation (FSD).</strong> Make every point $x_t$ along the forward flow discriminative and semantically rich.</li>
+      <li><strong>Reconstruction and Alignment Distillation (RAD).</strong> Further enhance the semantics through reconstruction target.</li>
     </ul>
   </div>
 
+  <figure class="l-body">
+      <img src="images/rectok/pipeline.png" alt="Pipeline of RecTok">
+      <figcaption>Pipeline of RecTok.</figcaption>
+  </figure>
+  
+  <p>
+    We show our RecTok above. During the training of RecTok, we apply a random mask to the input image and encode the visible regions using the encoder to obtain $x_1$. We then sample a time step $t$ and use the forward flow to generate the corresponding $x_t$. 
+    Subsequently, $x_t$ is fed into two decoders: the Semantic Decoder reconstructs the features of VFMs, 
+    while the Pixel Decoder reconstructs the pixel space. 
+    After training, both the Semantic Decoder and VFMs are discarded, ensuring the efficiency of RecTok during inference.
+    In the following sections, we further detail the FSD and RAD.
+  </p>
+
   <h3>Flow Semantic Distillation</h3>
+
+  <figure class="l-body">
+      <img src="images/rectok/fsd.png" alt="FSD">
+      <figcaption>Illustration of Flow Semantic Distillation.</figcaption>
+  </figure>
 
   <p>
     First we will introduce the Flow Semantic Distillation. 
@@ -236,13 +243,8 @@
     which are supervised by VFMs features.
   </p>
 
-  <figure class="l-body">
-      <img src="images/rectok/fsd.png" alt="Convergence comparison between RAEs and SD-VAE">
-      <figcaption>Illustratioin of Flow Semantic Distillation.</figcaption>
-  </figure>
-
   <p>
-    Considering the redundancy in high-dimensional latent spaces, we apply a dimension-dependent shift to the distribution of $t$, following RAE~\cite{RAE}, and sample it as follows:
+    Considering the redundancy in high-dimensional latent spaces, we apply a dimension-dependent shift to the distribution of $t$, following RAE, and sample it as follows:
   </p>
 
   <p>
@@ -254,79 +256,45 @@
   </p>
 
   <h3>Reconstruction and Alignment Distillation</h3>
+
+  <figure class="l-body">
+      <img src="images/rectok/rad.png" alt="RAD">
+      <figcaption>Illustratoin of Reconstruction and Alignment Distillation.</figcaption>
+  </figure>
+
   <p>
     To further enhance the semantic along the forward flow, inspired by masked image modeling methods, which obtain semantically rich features through pixel or feature reconstruction, we introduce a reconstructive target during FSD. 
-    Specifically, we apply random masks to the input image and reconstruct the missing regions based on the visible noisy latent features. We details the model design in the figure below.
+    Specifically, we apply random masks to the input image and reconstruct the missing regions based on the visible noisy latent features.
+    To ensure compatibility with the reconstruction task, we utilize a transformer-based semantic decoder $D_{sem}$.
   </p>
-
-  <figure class="l-body">
-      <img src="images/rectok/rad.png" alt="Convergence comparison between RAEs and SD-VAE">
-      <figcaption>Training convergence on ImageNet 256×256: RAEs reach strong sample quality in one tenth the number of updates.</figcaption>
-  </figure>
-
-  <p>
-    We show our RecTok above. During the training of RecTok, we apply a random mask to the input image and encode the visible regions using the encoder to obtain $x_1$. We then sample a time step $t$ and use the forward flow to generate the corresponding $x_t$. 
-    Subsequently, $x_t$ is fed into two decoders: the Semantic Decoder reconstructs the features of VFMs, 
-    while the Pixel Decoder reconstructs the pixel space. 
-    After training, both the Semantic Decoder and VFMs are discarded, ensuring the efficiency of RecTok during inference.
-  </p>
-
-  <figure class="l-body">
-      <img src="images/rectok/pipeline.png" alt="Convergence comparison between RAEs and SD-VAE">
-      <figcaption>Training convergence on ImageNet 256×256: RAEs reach strong sample quality in one tenth the number of updates.</figcaption>
-  </figure>
 </section>
 
 <section id="experiment" style="margin-top:40px;">
   <h2>Experiment</h2>
 
-  <!-- === Subsection 1 === -->
-  <h3>How can RAE extend to high-resolution synthesis efficiently?</h3>
-  <p>
-    A central challenge in generating high-resolution images is that resolution scales with the number of tokens:
-    doubling image size in each dimension requires roughly four times as many tokens. To address this, we let the
-    decoder handle resolution scaling by allowing its patch size <span class="math">\(p_d\)</span> to differ from the
-    encoder patch size <span class="math">\(p_e\)</span>. When \(p_d = p_e\), the output matches the input resolution;
-    setting \(p_d = 2p_e\) produces a 2× upsampled image, reconstructing a 512×512 image from the same tokens used at 256×256.
-  </p>
-
-  <figure style="float:right; width:45%; margin:0.5rem 0 0.5rem 1rem;">
-    <table class="display-table" style="width:100%; font-size:0.9em;">
+  <h3>Tokenizer Comparison on ImageNet-1K</h3>
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
       <tr>
-        <th>Method</th>
-        <th>#Tokens</th>
-        <th>gFID ↓</th>
-        <th>rFID ↓</th>
-      </tr>
-      <tr>
-        <td style="text-align:left;">Direct</td>
-        <td>1024</td>
-        <td>1.13</td>
-        <td>0.53</td>
-      </tr>
-      <tr style="background:#f7f7f7;">
-        <td style="text-align:left;">Upsample</td>
-        <td>256</td>
-        <td>1.61</td>
-        <td>0.97</td>
+        <!-- Left column: text -->
+        <td style="vertical-align:top; width:50%; text-align:justify; font-size: 1em;">
+          <p>
+            We compare RecTok with other representative tokenizers in terms of parameter count, GFLOPs, reconstruction quality, and generation performance.
+            RecTok achieves the best performance among ViT-based tokenizers.
+          </p>
+        </td>
+        <!-- Right column: table -->
+        <td style="vertical-align:top; width:50%;">
+          <figure class="l-body">
+              <img src="images/rectok/insight2.png" alt="Reconstruction examples produced by RAEs">
+              <figcaption></figcaption>
+          </figure>
+        </td>
       </tr>
     </table>
-    <figcaption style="font-size:0.85em; margin-top:4px;">
-      <strong>Comparison on ImageNet 512×512.</strong> Decoder upsampling achieves competitive FID compared to
-      direct 512-resolution training. Both models are trained for 400 epochs.
-    </figcaption>
-  </figure>
+  </div>
 
-  <p>
-    Since the decoder is decoupled from both the encoder and the diffusion process, we can reuse diffusion models trained at
-    256×256 resolution, simply swapping in an upsampling decoder to produce 512×512 outputs without retraining.
-    This approach slightly increases both rFID and gFID, but being 4× more efficient than quadrupling the number of tokens.
-  </p>
-
-  <div style="clear:both;"></div>
-
-  <!-- === Subsection 2 === -->
-  <h3>Does DiT<sup>DH</sup> work without RAE?</h3>
+  <h3>Generation Performance</h3>
   <p>
     In this work, we propose and study RAE and DiT<sup>DH</sup>. In <a href="#sec-theory">Section&nbsp;2</a>, we showed that
     RAE combined with DiT already brings substantial benefits, even without the additional head.
@@ -357,17 +325,7 @@
     </figcaption>
   </figure>
 
-  <p>
-    To investigate, we train both DiT-XL and DiT<sup>DH</sup>-XL on SD-VAE latents with a patch size of 2, alongside DINOv2-B
-    for comparison, for 80 epochs, and report unguided FID. As shown on the left, DiT<sup>DH</sup> performs even worse than DiT on SD-VAE, despite the
-    additional computation introduced by the diffusion head. This indicates that the head provides little benefit in
-    low-dimensional latent spaces, and its primary strength arises in high-dimensional diffusion tasks introduced by RAE.
-  </p>
-
-  <div style="clear:both;"></div>
-
-  <!-- === Subsection 3 === -->
-  <h3>The role of structured representation in high-dimensional diffusion</h3>
+  <h3>The Dimension of Latent Space</h3>
   <p>
     DiT<sup>DH</sup> achieves strong performance when paired with the high-dimensional latent space of RAE.
     This raises a key question: is the structured representation of RAE essential, or would DiT<sup>DH</sup> work equally well
@@ -398,15 +356,36 @@
     </figcaption>
   </figure>
 
+  <h3>T</h3>
   <p>
-    To evaluate this, we train DiT-XL and DiT<sup>DH</sup>-XL directly on raw pixels.
-    For 256×256 images with a patch size of 16, the resulting DiT input token dimensionality is 16×16×3 = 768,
-    matching that of the DINOv2-B latents. We report unguided FID after 80 epochs. As shown on the right, DiT<sup>DH</sup> outperforms DiT on pixels, but both models perform far
-    worse than their counterparts trained on RAE latents. These results demonstrate that high dimensionality alone is not
-    sufficient—the structured representation provided by RAE is crucial for achieving strong performance gains.
+    DiT<sup>DH</sup> achieves strong performance when paired with the high-dimensional latent space of RAE.
+    This raises a key question: is the structured representation of RAE essential, or would DiT<sup>DH</sup> work equally well
+    on unstructured high-dimensional inputs such as <em>raw pixels</em>?
   </p>
 
-  <div style="clear:both;"></div>
+  <figure style="float:right; width:40%; margin:0.5rem 0 0.5rem 1rem;">
+    <table class="display-table" style="width:100%; font-size:0.9em;">
+      <tr>
+        <th></th>
+        <th>Pixel</th>
+        <th>DINOv2-B</th>
+      </tr>
+      <tr>
+        <td style="text-align:left;">DiT-XL</td>
+        <td>51.09</td>
+        <td>4.28</td>
+      </tr>
+      <tr style="background:#f7f7f7;">
+        <td style="text-align:left;">DiT<sup>DH</sup>-XL</td>
+        <td>30.56</td>
+        <td><strong>2.16</strong></td>
+      </tr>
+    </table>
+    <figcaption style="font-size:0.85em; margin-top:4px;">
+      <strong>Comparison on pixel diffusion (gFID-50k).</strong> Pixel diffusion performs far worse than diffusion on DINOv2-B
+      latents.
+    </figcaption>
+  </figure>
 </section>
 
 <section id="conclusion" style="margin-top:40px;">
