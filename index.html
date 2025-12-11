@@ -11,16 +11,16 @@
         <script src="cross_fade.js"></script>
         <link rel="stylesheet" href="style.css">
         <script>
-  window.MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['\\[','\\]'], ['$$','$$']],
-      packages: {'[+]': ['ams', 'textmacros']}  // enables \text
-    },
-    svg: { fontCache: 'global' }
-  };
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+          window.MathJax = {
+            tex: {
+              inlineMath: [['$', '$'], ['\\(', '\\)']],
+              displayMath: [['\\[','\\]'], ['$$','$$']],
+              packages: {'[+]': ['ams', 'textmacros']}  // enables \text
+            },
+            svg: { fontCache: 'global' }
+          };
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
@@ -39,6 +39,7 @@
             </div>
         </div>
     <d-article>
+
         <div class="byline">
             <div class="byline-container">
                 <div class="byline-column">
@@ -148,7 +149,7 @@
     <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
       <tr>
         <!-- Left column: text -->
-        <td style="vertical-align:top; width:40%; text-align:justify; font-size: 1em;">
+        <td style="vertical-align:top; width:40%; text-align:left; font-size: 1em;">
           <p>
           However, their generation quality in high dimensions still lags behind their low-dimensional counterparts: continuous to expand the latent dimension still leads to the degradation of generation quality. 
           RecTok overcome this bottleneck, we increase the dimension of latent space to 128 with consistent gain in reconstruction, generation, and linear probing.
@@ -166,6 +167,7 @@
       </tr>
     </table>
   </div>
+
 </section>
 
 <section id="insight">
@@ -277,7 +279,7 @@
 <section id="experiment" style="margin-top:40px;">
   <h2>Experiment</h2>
 
-  <h3>Tokenizer Comparison on ImageNet-1K</h3>
+  <h3>Tokenizer Comparison</h3>
   <div style="max-width: 1000px; margin: 0 auto;">
     <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
       <tr>
@@ -299,6 +301,11 @@
     </table>
   </div>
 
+  <figure class="l-body">
+    <img src="images/rectok/qual_rec.png" alt="FSD">
+    <figcaption>Reconstruction results. We put the original images on the left and the reconstructed images on the right.</figcaption>
+  </figure>
+
   <h3>Generation Performance</h3>
   <p>
     We compare RecTok against other representative tokenizers and fast convergence methods. RecTok reaches an FID of 1.34 and an IS of 254.6 without guidance, outperforming previous methods by a large margin. 
@@ -308,6 +315,11 @@
   <figure class="l-body">
     <img src="images/rectok/gen_res.png" alt="FSD">
     <figcaption>Quantitative results on ImageNet-1K 256x256.</figcaption>
+  </figure>
+
+  <figure class="l-body">
+    <img src="images/rectok/qual_gen.png" alt="FSD">
+    <figcaption>Qualitative results on ImageNet-1K 256x256. We show selected examples of class-conditional generation using DiTDH-XL with AutoGuidance.</figcaption>
   </figure>
 
   <h3>The Dimension of Latent Space</h3>
@@ -355,17 +367,17 @@
 
   <figure class="l-body">
     <img src="images/rectok/pca.png" alt="FSD">
-    <figcaption>Ablation Studies.</figcaption>
+    <figcaption>PCA visualization.</figcaption>
   </figure>
 
   <figure class="l-body">
     <img src="images/rectok/cossim.png" alt="FSD">
-    <figcaption>Ablation Studies.</figcaption>
+    <figcaption>Cosine similarity visualization.</figcaption>
   </figure>
 
   <figure class="l-body">
     <img src="images/rectok/tsne.png" alt="FSD">
-    <figcaption>Ablation Studies.</figcaption>
+    <figcaption>t-SNE visulization along the forward flow.</figcaption>
   </figure>
 
 </section>
