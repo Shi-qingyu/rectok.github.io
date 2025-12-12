@@ -110,8 +110,8 @@
 
     <d-figure>
       <figure class="l-body">
-        <img src="images/rectok/teaser.png", alt="RAE architecture overview">
-        <figcaption style="margin-top:20px;"></figcaption>
+        <img src="images/rectok/teaser.png", alt="RecTok teaser">
+        <figcaption style="margin-top:20px;">(a) presents the core insights of our approach. Unlike previous works, we enhance semantic information along the forward pass of the rectified flow via reconstruction distillation. (b) compares the gFID convergence across training epochs, where our method converges 7.75x faster than prior works and achieves a final gFID of 1.34 without classifier-free guidance, the state-of-the-art gFID performance to date.</figcaption>
     </d-figure>
 </section>
 
@@ -126,8 +126,8 @@
 
     <d-figure>
         <figure class="l-body">
-            <img src="images/rectok/dim_dilemma.png" alt="Reconstruction examples produced by RAEs">
-            <figcaption></figcaption>
+            <img src="images/rectok/dim_dilemma.png" alt="Dim dilemma">
+            <figcaption>Increasing the latent space dimension leads to better reconstruction and semantics, but degrades generation performance (We select DiT-B as denoising network).</figcaption>
         </figure>
     </d-figure>
 
@@ -140,8 +140,11 @@
   
     <d-figure>
         <figure class="l-body">
-            <img src="images/rectok/recent_works2.png" alt="Recent works">
-            <figcaption></figcaption>
+            <img src="images/rectok/recent_works.png" alt="Recent works">
+            <figcaption>Recent works improve latent space semantics and accelerate the convergence of downstream generation training. 
+              Specifically, increasing the latent dimension from 16 to 32 has been shown to yield superior generation performance.
+              We report the number from the original papers.
+            </figcaption>
         </figure>
     </d-figure>
 
@@ -160,7 +163,7 @@
           <d-figure>
               <figure class="l-body">
                   <img src="images/rectok/motivation.png" alt="Reconstruction examples produced by RAEs">
-                  <figcaption></figcaption>
+                  <figcaption>Increasing the latent space dimension consistently improves the generation performance of RecTok, indicating that the dimensional bottleneck no longer constrains the semantic information encoded in the latent features.</figcaption>
               </figure>
           </d-figure>
         </td>
@@ -174,15 +177,15 @@
   <h2>Insight</h2>
   <p>
   Unlike previous works that directly inject semantics to the un-noised latent space, 
-  our core insight is the denoising network is trained on the forward flow instead of the latent space, as shown in figure A. 
-  To understand the importance of semantic consistency along the flow, we first evaluate the discriminative capability on the flow. As shown in figure B, 
+  our core insight is the denoising network is trained on the forward flow instead of the latent space, as shown in figure (a). 
+  To understand the importance of semantic consistency along the flow, we first evaluate the discriminative capability on the flow. As shown in figure (b), 
   the linear probing accuracy of the previous tokenizer drops remarkably as the latent is propagated along the forward flow, the representations that DiT receives during diffusion training.
   </p>
 
   <d-figure>
       <figure class="l-body">
           <img src="images/rectok/insight.png" alt="Reconstruction examples produced by RAEs">
-          <figcaption></figcaption>
+          <figcaption>We</figcaption>
       </figure>
   </d-figure>
 
@@ -203,7 +206,7 @@
         <td style="vertical-align:top; width:50%;">
           <figure class="l-body">
               <img src="images/rectok/insight2.png" alt="Reconstruction examples produced by RAEs">
-              <figcaption></figcaption>
+              <figcaption>We aim to enhance the semantics along the forward flow from latent features to noise.</figcaption>
           </figure>
         </td>
       </tr>
@@ -270,7 +273,7 @@
   </figure>
 
   <p>
-    To further enhance the semantic along the forward flow, inspired by masked image modeling methods, which obtain semantically rich features through pixel or feature reconstruction, we introduce a reconstructive target during FSD. 
+    To further enhance the semantics along the forward flow, inspired by masked image modeling methods, which obtain semantically rich features through pixel or feature reconstruction, we introduce a reconstructive target during FSD. 
     Specifically, we apply random masks to the input image and reconstruct the missing regions based on the visible noisy latent features.
     To ensure compatibility with the reconstruction task, we utilize a transformer-based semantic decoder $D_{sem}$.
   </p>
