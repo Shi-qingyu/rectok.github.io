@@ -163,7 +163,6 @@
           <d-figure>
               <figure class="l-body">
                   <img src="images/rectok/motivation.png" alt="Reconstruction examples produced by RAEs">
-                  <figcaption>Increasing the latent space dimension consistently improves the generation performance of RecTok, indicating that the dimensional bottleneck no longer constrains the semantic information encoded in the latent features.</figcaption>
               </figure>
           </d-figure>
         </td>
@@ -185,7 +184,7 @@
   <d-figure>
       <figure class="l-body">
           <img src="images/rectok/insight.png" alt="Reconstruction examples produced by RAEs">
-          <figcaption>We</figcaption>
+          <figcaption>Instead of enhancing semantics into the latent space, we inject them into the forward flow (a). Previous tokenizers' semantics deteriorate along the forward flow, as shown in figure (b).</figcaption>
       </figure>
   </d-figure>
 
@@ -288,7 +287,7 @@
 
   <h3>Tokenizer Comparison</h3>
   <div style="max-width: 1000px; margin: 0 auto;">
-    <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
+    <table style="width:100%; margin-top:25px; margin-left: -20px; margin-bottom: 0; border-collapse:separate; border-spacing:12px; border: none;">
       <tr>
         <!-- Left column: text -->
         <td style="vertical-align:top; width:50%; text-align:left; font-size: 1em;">
@@ -299,19 +298,19 @@
         </td>
         <!-- Right column: table -->
         <td style="vertical-align:top; width:50%;">
-          <figure class="l-body">
+          <figure class="l-body" style="margin-bottom: 0;">
               <img src="images/rectok/tokenizer_comp.png" alt="Reconstruction examples produced by RAEs">
-              <figcaption></figcaption>
           </figure>
         </td>
       </tr>
     </table>
   </div>
 
-  <figure class="l-body">
-    <img src="images/rectok/qual_rec.png" alt="FSD">
+  <figure class="l-body" style="margin-top: -10px;">
+    <img src="images/rectok/qual_rec.png" alt="FSD" style="width: 100%; display: block; margin: 0 auto;">
     <figcaption>Reconstruction results. We put the original images on the left and the reconstructed images on the right.</figcaption>
   </figure>
+
 
   <h3>Generation Performance</h3>
   <p>
