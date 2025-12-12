@@ -152,14 +152,14 @@
     <table style="width:100%; margin-top:25px; margin-left: -20px; border-collapse:separate; border-spacing:12px; border: none;">
       <tr>
         <!-- Left column: text -->
-        <td style="vertical-align:top; width:40%; text-align:left; font-size: 1em;">
+        <td style="vertical-align:top; width:45%; text-align:left; font-size: 1em;">
           <p>
           However, their generation quality in high dimensions still lags behind their low-dimensional counterparts: continuous to expand the latent dimension still leads to the degradation of generation quality. 
           RecTok overcome this bottleneck, we increase the dimension of latent space to 128 with consistent gain in reconstruction, generation, and linear probing.
           </p>
         </td>
         <!-- Right column: table -->
-        <td style="vertical-align:top; width:60%;">
+        <td style="vertical-align:top; width:55%;">
           <d-figure>
               <figure class="l-body">
                   <img src="images/rectok/motivation.png" alt="Reconstruction examples produced by RAEs">
@@ -226,7 +226,11 @@
 
   <figure class="l-body">
       <img src="images/rectok/pipeline.png" alt="Pipeline of RecTok">
-      <figcaption>Pipeline of RecTok.</figcaption>
+      <figcaption>Pipeline of RecTok. During the training of RecTok, we apply a random mask to the input image and encode the visible regions using the encoder to obtain $x_1$. 
+        We then sample a time step $t$ and use the forward flow to generate the corresponding $x_t$. 
+        Subsequently, $x_t$ is fed into two decoders: the Semantic Decoder reconstructs the features of VFMs, while the Pixel Decoder reconstructs the pixel space. 
+        After training, both the Semantic Decoder and VFMs are discarded, ensuring the efficiency of RecTok during inference.
+      </figcaption>
   </figure>
   
   <p>
@@ -311,13 +315,16 @@
 
   <h3>Generation Performance</h3>
   <p>
-    We compare RecTok against other representative tokenizers and fast convergence methods. RecTok reaches an FID of 1.34 and an IS of 254.6 without guidance, outperforming previous methods by a large margin. 
-    With AutoGuidance, it achieves an FID of 1.13 and an IS of 289.2 using only 600 epochs, representing the best overall performance.
+    As shown in the table below, RecTok with $\text{DiT}^{\text{DH}}\text{-XL}$ achieves the best gFID=1.34 without classifier-free guidance. 
+    When employing classifier-free guidance, we adopt the AutoGuidance strategy and achieve a gFID of 1.13, matching the gFID of RAE while showing a clear advantage in Inception Score (IS).
   </p>
 
   <figure class="l-body">
     <img src="images/rectok/gen_res.png" alt="FSD">
-    <figcaption>Quantitative results on ImageNet-1K 256x256.</figcaption>
+    <figcaption>Quantitative results on ImageNet-1K 256x256. 
+      RecTok reaches an FID of 1.34 and an IS of 254.6 without guidance, outperforming previous methods by a large margin. 
+      With AutoGuidance~\cite{AG}, it achieves an FID of 1.13 and an IS of 289.2 using only 600 epochs, representing the best overall performance.
+    </figcaption>
   </figure>
 
   <figure class="l-body">
@@ -349,8 +356,11 @@
   </div>
 
   <figure class="l-body">
-    <img src="images/rectok/dim_table.png" alt="FSD">
-    <figcaption>Ablation Studies.</figcaption>
+    <img src="images/rectok/dim_table.png" alt="FSD", width="70%">
+    <figcaption>Results across different feature dimensions. L.P. Acc. (L) denotes linear probing accuracy on latent features, 
+      while L.P. Acc. (SL) refers to linear probing accuracy on second-last layer features. 
+      As the feature dimension increases, discriminative ability, reconstruction, and generation show consistent gains.
+    </figcaption>
   </figure>
 
   <h3>Ablation Studies</h3>
@@ -359,8 +369,8 @@
   </p>
 
   <figure class="l-body">
-    <img src="images/rectok/abl.png" alt="FSD">
-    <figcaption>Ablation Studies.</figcaption>
+    <img src="images/rectok/abl.png" alt="Ablation", width="70%">
+    <figcaption>Overall ablation study of FSD, RAD, and Decoder Finetuning. Each method provides a clear improvement.</figcaption>
   </figure>
 
   <h3>Latent Feature Visulization</h3>
@@ -369,18 +379,15 @@
   </p>
 
   <figure class="l-body">
-    <img src="images/rectok/pca.png" alt="FSD">
-    <figcaption>PCA visualization.</figcaption>
+    <img src="images/rectok/pca.png" alt="PCA">
   </figure>
 
   <figure class="l-body">
-    <img src="images/rectok/cossim.png" alt="FSD">
-    <figcaption>Cosine similarity visualization.</figcaption>
+    <img src="images/rectok/cossim.png" alt="Cosine Similarity">
   </figure>
 
   <figure class="l-body">
-    <img src="images/rectok/tsne.png" alt="FSD">
-    <figcaption>t-SNE visulization along the forward flow.</figcaption>
+    <img src="images/rectok/tsne.png" alt="t-SNE">
   </figure>
 
 </section>
