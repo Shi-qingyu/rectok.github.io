@@ -32,9 +32,9 @@
               <h1>RecTok: Reconstruction Distillation along Rectified Flow</h1>
               <p>RecTok overcomes the limitations of latent space dimensionality, achieving state-of-the-art generation performance through a high-dimensional, semantically rich latent space.</p>
               <div class="button-container">
-                <a href="https://arxiv.org/abs/2510.11690" class="button">Paper</a>
-                <a href="https://github.com/bytetriper/RAE" class="button">Code</a>
-                <a href="https://huggingface.co/collections/nyu-visionx/rae-68ecb57b8bfbf816c83cce15" class="button">🤗 Models</a>
+                <a href="https://shi-qingyu.github.io/rectok.github.io/" class="button">Paper</a>
+                <a href="https://github.com/Shi-qingyu/RecTok" class="button">Code</a>
+                <a href="https://huggingface.co/QingyuShi/RecTok" class="button">🤗 Models</a>
               </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <div class="byline-column">
                     <h3>Authors</h3>
                     <div class="authors-grid">
-                        <p><a href="http://bytetriper.github.io/" class="author-link">Qingyu Shi</a></p>
+                        <p><a href="https://shi-qingyu.github.io/" class="author-link">Qingyu Shi</a></p>
                         <p><a href="https://wusize.github.io/" class="author-link">Size Wu</a></p>
                         <p><a href="https://noyii.github.io/" class="author-link">Jinbin Bai</a></p>
                         <p><a href="https://openreview.net/profile?id=%7EKaidong_Yu1" class="author-link">Kaidong Yu</a></p>
@@ -65,7 +65,7 @@
 
                 <div class="byline-column">
                     <h3>Resources</h3>
-                    <p><a href="https://arxiv.org/abs/2510.11690" class="affiliation-link">Paper</a></p>
+                    <p><a href="https://shi-qingyu.github.io/rectok.github.io/" class="affiliation-link">Paper</a></p>
                     <p><a href="https://github.com/Shi-qingyu/RecTok" class="affiliation-link">Code Repository</a></p>
                     <p><a href="https://huggingface.co/QingyuShi/RecTok" class="affiliation-link">Hugging Face Models</a></p>
                 </div>
@@ -314,8 +314,10 @@
 
   <h3>Generation Performance</h3>
   <p>
-    As shown in the table below, RecTok with $\text{DiT}^{\text{DH}}\text{-XL}$ achieves the best gFID=1.34 without classifier-free guidance. 
+    As shown in the table below, RecTok with $\text{DiT}^{\text{DH}}\text{-XL}$ achieves the best gFID=1.34 without classifier-free guidance.
     When employing classifier-free guidance, we adopt the AutoGuidance strategy and achieve a gFID of 1.13, matching the gFID of RAE while showing a clear advantage in Inception Score (IS).
+    Compared to other latent distillation methods like VA-VAE, which focus on enhancing latent feature semantics rather than forward flow, RecTok outperforms by a large margin. 
+    This indicates that enhancing forward flow semantics is more beneficial for diffusion generation quality.
   </p>
 
   <figure class="l-body">
@@ -363,6 +365,8 @@
   <h3>Ablation Studies</h3>
   <p>
     We present the overall ablation results in the table below, which clearly demonstrate the performance gains contributed by each proposed component.
+    Although Reconstruction and Alignment Distillation (RAD) slightly degrades reconstruction quality, it leads to improved generation performance. 
+    More importantly, this reconstruction ability can be largely recovered by finetuning the pixel decoder after FSD and RAD.
   </p>
 
   <figure class="l-body">
